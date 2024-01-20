@@ -6,6 +6,10 @@ namespace Facade;
 
 public class NotificationSender:INotificationSender
 {
+    private static readonly NotificationSender Instance = new NotificationSender();
+    public static NotificationSender GetInstance() => Instance;
+
+    
     private EmailNotificationSender _emailNotificationSender = new();
     private SmsNotificationSender _smsNotificationSender = new();
     private PushNotificationSender _pushNotificationSender = new();
@@ -27,12 +31,11 @@ public class NotificationSender:INotificationSender
         
     }
 
-    public string EmailNotification(string to, string data)
+    public string EmailNotification(EmailMessage message)
     {
-        var email = _emailNotificationSender.CreateEmailMessage("deafult", to, data);
         try
         {
-           _emailNotificationSender.SendEmailMessage(email);
+           _emailNotificationSender.SendEmailMessage(message);
             return "email notification successful send";
         }
         catch (Exception e)
